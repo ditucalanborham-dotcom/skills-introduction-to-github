@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday, My Love! 🎂</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #1a0533 0%, #3b0764 50%, #1a0533 100%);
+      color: #fff;
+      text-align: center;
+    }
+
+    /* ── Stars background ── */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      animation: twinkle var(--dur) ease-in-out infinite alternate;
+      opacity: 0;
+    }
+    @keyframes twinkle {
+      to { opacity: 0.85; }
+    }
+
+    /* ── Floating hearts ── */
+    .hearts-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .heart-float {
+      position: absolute;
+      bottom: -60px;
+      font-size: 1.6rem;
+      animation: floatUp var(--dur2) ease-in infinite;
+      opacity: 0;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0)   rotate(0deg);   opacity: 1; }
+      100% { transform: translateY(-110vh) rotate(30deg); opacity: 0; }
+    }
+
+    /* ── Confetti ── */
+    .confetti-piece {
+      position: fixed;
+      top: -20px;
+      width: 10px;
+      height: 14px;
+      border-radius: 2px;
+      opacity: 0;
+      animation: confettiFall var(--dur3) ease-in infinite;
+      z-index: 2;
+      pointer-events: none;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(0)   rotate(0deg)   scaleX(1);  opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(105vh) rotate(720deg) scaleX(-1); opacity: 0; }
+    }
+
+    /* ── Card ── */
+    .card {
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 28px;
+      padding: 3rem 2.4rem 2.6rem;
+      max-width: 600px;
+      width: 92%;
+      box-shadow: 0 8px 60px rgba(255, 100, 150, 0.35);
+      animation: cardPop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes cardPop {
+      from { transform: scale(0.4); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    /* ── Cake emoji ── */
+    .cake {
+      font-size: 5rem;
+      display: block;
+      margin-bottom: 0.5rem;
+      animation: cakeBounce 2s ease-in-out infinite;
+    }
+    @keyframes cakeBounce {
+      0%, 100% { transform: translateY(0);    }
+      50%       { transform: translateY(-12px); }
+    }
+
+    /* ── Heading ── */
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      background: linear-gradient(90deg, #ff6eb4, #ffcc70, #ff6eb4);
+      background-size: 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s linear infinite;
+      letter-spacing: 2px;
+      margin-bottom: 0.3rem;
+    }
+    @keyframes shimmer {
+      to { background-position: 200% center; }
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #ffcc70;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 1.8rem;
+      opacity: 0.9;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 70%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #ff6eb4, transparent);
+      margin: 0 auto 1.8rem;
+    }
+
+    /* ── Message ── */
+    .message {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: rgba(255, 255, 255, 0.92);
+      margin-bottom: 2rem;
+    }
+    .message em {
+      color: #ff9ecc;
+      font-style: normal;
+      font-weight: bold;
+    }
+
+    /* ── Reasons list ── */
+    .reasons {
+      list-style: none;
+      text-align: left;
+      margin: 0 auto 2rem;
+      max-width: 420px;
+    }
+    .reasons li {
+      padding: 0.45rem 0;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.88);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.55rem;
+    }
+    .reasons li span.icon { font-size: 1.2rem; flex-shrink: 0; }
+
+    /* ── Button ── */
+    .btn {
+      display: inline-block;
+      padding: 0.85rem 2.4rem;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #ff6eb4 0%, #ff9e50 100%);
+      color: #fff;
+      font-size: 1.05rem;
+      font-family: inherit;
+      font-weight: bold;
+      letter-spacing: 1px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 24px rgba(255, 110, 180, 0.5);
+      transition: transform 0.18s, box-shadow 0.18s;
+      text-decoration: none;
+    }
+    .btn:hover { transform: scale(1.06); box-shadow: 0 8px 32px rgba(255,110,180,0.7); }
+    .btn:active { transform: scale(0.97); }
+
+    /* ── Footer note ── */
+    .footer-note {
+      margin-top: 1.6rem;
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 1px;
+    }
+
+    /* ── Popup overlay ── */
+    #popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 5, 51, 0.96);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.4rem;
+      animation: fadeIn 0.5s ease both;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    #popup p {
+      font-size: 1.3rem;
+      color: #ffcc70;
+      max-width: 340px;
+    }
+    #popup .big-emoji { font-size: 5rem; animation: cakeBounce 1.6s ease-in-out infinite; }
+  </style>
+</head>
+<body>
+
+  <!-- Opening surprise popup -->
+  <div id="popup">
+    <div class="big-emoji">🎁</div>
+    <p>Someone has a special surprise waiting for you…</p>
+    <button class="btn" onclick="openSurprise()">Open Your Surprise 💝</button>
+  </div>
+
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Floating hearts -->
+  <div class="hearts-layer" id="hearts"></div>
+
+  <!-- Main card -->
+  <div class="card" id="card" style="display:none;">
+    <span class="cake">🎂</span>
+    <h1>Happy Birthday!</h1>
+    <p class="subtitle">✨ My Dearest Love ✨</p>
+    <div class="divider"></div>
+
+    <p class="message">
+      Today the whole universe pauses to celebrate<br/>
+      the most wonderful person I know — <em>you</em>.<br/><br/>
+      Every moment with you is my favorite memory,<br/>
+      every smile of yours is my greatest joy.<br/>
+      I am the luckiest person alive because<br/>
+      I get to call you <em>mine</em>. 💕
+    </p>
+
+    <div class="divider"></div>
+
+    <ul class="reasons">
+      <li><span class="icon">🌟</span> You make every ordinary day extraordinary.</li>
+      <li><span class="icon">😂</span> Your laughter is the best sound in the world.</li>
+      <li><span class="icon">🤝</span> You always know how to make things better.</li>
+      <li><span class="icon">🌹</span> You are breathtakingly beautiful, inside and out.</li>
+      <li><span class="icon">💫</span> Being loved by you is the greatest gift of my life.</li>
+    </ul>
+
+    <button class="btn" onclick="sendLove()">Send More Love 💌</button>
+
+    <p class="footer-note">Made with 💖 just for you &nbsp;·&nbsp; Happy Birthday, my love!</p>
+  </div>
+
+  <!-- Canvas for extra confetti bursts -->
+  <canvas id="confettiCanvas" style="position:fixed;inset:0;pointer-events:none;z-index:3;"></canvas>
+
+  <script>
+    /* ─── Stars ─────────────────────────────── */
+    (function createStars() {
+      const layer = document.getElementById('stars');
+      for (let i = 0; i < 120; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const size = Math.random() * 3 + 1;
+        s.style.cssText = `
+          width:${size}px; height:${size}px;
+          left:${Math.random()*100}%;
+          top:${Math.random()*100}%;
+          --dur:${(Math.random()*3+1).toFixed(1)}s;
+          animation-delay:${(Math.random()*5).toFixed(1)}s;
+        `;
+        layer.appendChild(s);
+      }
+    })();
+
+    /* ─── Floating hearts ────────────────────── */
+    (function createHearts() {
+      const layer = document.getElementById('hearts');
+      const emojis = ['❤️','💕','💖','💗','💝','💓','🌸','✨'];
+      for (let i = 0; i < 18; i++) {
+        const h = document.createElement('div');
+        h.className = 'heart-float';
+        h.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        h.style.cssText = `
+          left:${Math.random()*100}%;
+          --dur2:${(Math.random()*6+5).toFixed(1)}s;
+          animation-delay:${(Math.random()*8).toFixed(1)}s;
+          font-size:${(Math.random()*1.5+1).toFixed(1)}rem;
+        `;
+        layer.appendChild(h);
+      }
+    })();
+
+    /* ─── Canvas confetti burst ──────────────── */
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function randomColor() {
+      const cols = ['#ff6eb4','#ffcc70','#a78bfa','#34d399','#f472b6','#60a5fa','#fb923c'];
+      return cols[Math.floor(Math.random() * cols.length)];
+    }
+
+    function burst(x, y, count) {
+      for (let i = 0; i < count; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 7 + 2;
+        particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 4,
+          alpha: 1,
+          color: randomColor(),
+          w: Math.random() * 8 + 4,
+          h: Math.random() * 5 + 3,
+          rot: Math.random() * 360,
+          rotV: (Math.random() - 0.5) * 10,
+        });
+      }
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => p.alpha > 0.02);
+      for (const p of particles) {
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.vy += 0.18; // gravity
+        p.alpha -= 0.013;
+        p.rot += p.rotV;
+        ctx.save();
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI / 180);
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      }
+      requestAnimationFrame(animateConfetti);
+    }
+    animateConfetti();
+
+    /* ─── Open surprise ──────────────────────── */
+    const cardEl = document.getElementById('card');
+    let cardVisible = false;
+
+    function openSurprise() {
+      document.getElementById('popup').style.display = 'none';
+      cardEl.style.display = 'block';
+      cardVisible = true;
+
+      // Burst confetti from multiple points
+      const w = window.innerWidth, h = window.innerHeight;
+      setTimeout(() => burst(w * 0.2, h * 0.3, 60), 0);
+      setTimeout(() => burst(w * 0.8, h * 0.3, 60), 200);
+      setTimeout(() => burst(w * 0.5, h * 0.4, 80), 400);
+      setTimeout(() => burst(w * 0.1, h * 0.6, 50), 600);
+      setTimeout(() => burst(w * 0.9, h * 0.6, 50), 800);
+    }
+
+    /* ─── Send more love button ──────────────── */
+    function sendLove() {
+      const w = window.innerWidth, h = window.innerHeight;
+      for (let i = 0; i < 6; i++) {
+        setTimeout(() => burst(Math.random() * w, Math.random() * h * 0.6, 50), i * 150);
+      }
+    }
+
+    /* ─── Continuous gentle confetti rain ───── */
+    setInterval(() => {
+      if (cardVisible) {
+        burst(Math.random() * window.innerWidth, -10, 8);
+      }
+    }, 600);
+  </script>
+</body>
+</html>
